@@ -54,7 +54,7 @@
             setcookie($cookieName, $cookieValue, time()+ $cookieExpirationSeconds);
         }
 
-          // Mostrar cookies existentes
+          //Este codigo solo muestra la ultima cookie. 
           foreach ($_COOKIE as $name => $value) {
             echo "<tr><td>$name</td><td>$value</td></tr>";
        
