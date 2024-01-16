@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-   
+
     <title>Cookies.php</title>
 </head>
 
@@ -26,7 +26,7 @@
             </div>
             <div class="form-floating mb-3">
                 <p><label for="cookieExpirationSeconds" class="form-label">Cookie expiration seconds:</label></p>
-                <input type="number" class="form-control" pattern="^[1-9]\d*$" id="cookieExpirationSeconds" name="cookieExpirationSeconds"aria-describedby="cookieExpirationSeconds">
+                <input type="number" class="form-control" pattern="^[1-9]\d*$" id="cookieExpirationSeconds" name="cookieExpirationSeconds" aria-describedby="cookieExpirationSeconds">
                 <div id="cookieExpirationSeconds" class="form-text">.</div>
             </div>
             <button type="submit" class="btn btn-primary">Añadir cookie</button>
@@ -42,28 +42,35 @@
                 </tr>
             </thead>
             <tbody>
-        <?php
-        if (isset($_POST["cookieName"], $_POST["cookieValue"])){
+                <?php
+                if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["cookieName"], $_POST["cookieValue"])) {
 
-            $cookieName = $_POST["cookieName"];
-            $cookieValue  = $_POST["cookieValue"];
-            //verificamos si se le  ha dado un valor  al campo expiracion o aplicamos su valor por defecto
-            $cookieExpirationSeconds = isset ($_POST["cookieExpirationSeconds"])?(int)$_POST["cookieExpirationSeconds"] : 0;
+                    $cookieName = $_POST["cookieName"];
+                    $cookieValue = $_POST["cookieValue"];
 
-          
-            setcookie($cookieName, $cookieValue, time()+ $cookieExpirationSeconds);
-        }
+                    //verificamos si se le  ha dado un valor  al campo expiracion o aplicamos su valor por defecto
+                    $cookieExpirationSeconds = isset($_POST["cookieExpirationSeconds"]) ? (int)$_POST["cookieExpirationSeconds"] : 0;
 
-          //Este codigo solo muestra la ultima cookie. 
-          foreach ($_COOKIE as $name => $value) {
-            echo "<tr><td>$name</td><td>$value</td></tr>";
-       
-        }
-        ?>
-          </tbody>
+                    setcookie($cookieName, $cookieValue, time() + $cookieExpirationSeconds, '/', '', false, true);
+                }
+
+             
+                if (isset($_COOKIE["$cookieName"])) {
+                    foreach ($_COOKIE["$cookieName"] as $cookieName => $cookieValue) {
+                        $cookieData[] = array('name' => $cookieName, 'value' => $cookieValue);
+                        echo "<tr><td>$cookieData[name]</td><td>$cookieData[value]</td></tr>";
+                    }
+                   
+                }
+                
+                
+                
+                
+                ?>
+            </tbody>
         </table>
     </div>
-    <div id="datosCookies" class="container mb-3">
+    <div id="borrarCookies" class="container mb-3">
     </div>
 
 
