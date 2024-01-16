@@ -16,24 +16,27 @@
         <form class="form-floating p-3" method=post>
             <div class="form-floating mb-3">
                 <p><label for="cookieName" class="form-label">Cookie name:</label></p>
-                <input type="text" class="form-control" id="cookieName" name="cookieName" aria-describedby="cookieName" required>
-
+                <input type="text" class="form-control" id="cookieName" name="cookieName" aria-describedby="cookiesName" required>
             </div>
+
             <div class="form-floating mb-3">
                 <p><label for="cookieValue" class="form-label">Cookie value:</label></p>
-                <input type="text" class="form-control" id="cookieValue" name="cookieValue" aria-describedby="cookieValue" required>
-
+                <input type="text" class="form-control" id="cookieValue" name="cookieValue" aria-describedby="cookiesValue" required>
             </div>
+
             <div class="form-floating mb-3">
                 <p><label for="cookieExpirationSeconds" class="form-label">Cookie expiration seconds:</label></p>
-                <input type="number" class="form-control" pattern="^[1-9]\d*$" id="cookieExpirationSeconds" name="cookieExpirationSeconds" aria-describedby="cookieExpirationSeconds">
+                <input type="number" class="form-control" pattern="^[1-9]\d*$" id="cookieExpirationSeconds" name="cookieExpirationSeconds" aria-describedby="cookieExpirationInSeconds">
                 <div id="cookieExpirationSeconds" class="form-text">.</div>
             </div>
+
             <button type="submit" class="btn btn-primary">Añadir cookie</button>
         </form>
     </div>
+
     <div id="cookiesCreadas" class="container mb-3">
         <h2>Cookies creadas</h2>
+
         <table class="table">
             <thead>
                 <tr>
@@ -43,37 +46,37 @@
             </thead>
             <tbody>
                 <?php
-                if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["cookieName"], $_POST["cookieValue"])) {
+
+                if (isset($_POST["cookieName"], $_POST["cookieValue"])) {
 
                     $cookieName = $_POST["cookieName"];
                     $cookieValue = $_POST["cookieValue"];
 
                     //verificamos si se le  ha dado un valor  al campo expiracion o aplicamos su valor por defecto
-                    $cookieExpirationSeconds = isset($_POST["cookieExpirationSeconds"]) ? (int)$_POST["cookieExpirationSeconds"] : 0;
-
-                    setcookie($cookieName, $cookieValue, time() + $cookieExpirationSeconds, '/', '', false, true);
+                    $cookieExpirationSeconds = isset($_POST["cookieExpirationSeconds"]) ? (int) $_POST["cookieExpirationSeconds"] : 0;
+                    // he tenido que añadir algunos parametros  para las pruebas porque en mi navegador daba error. Lo dejo en comentarios por si es necesario;
+                    setcookie($cookieName, $cookieValue, time() + $cookieExpirationSeconds);
                 }
 
-             
-                if (isset($_COOKIE["$cookieName"])) {
-                    foreach ($_COOKIE["$cookieName"] as $cookieName => $cookieValue) {
-                        $cookieData[] = array('name' => $cookieName, 'value' => $cookieValue);
-                        echo "<tr><td>$cookieData[name]</td><td>$cookieData[value]</td></tr>";
-                    }
-                   
+                // declaramos e inicializamos un array vacio para  almacenar nombre y valor de las cookies
+                $cookiesArray = array();
+                //recorremos nombre y valor de todas las cookies presentes en $_COOKIE recopilandolas en la array
+                foreach ($_COOKIE as $name => $value) {
+                    $cookiesArray[$name] = $value;
                 }
-                
-                
-                
-                
+                //recorremos nuestra array para mostrarla por pantalla
+                foreach ($cookiesArray as $cookieName => $cookieValue) {
+                    echo "<tr><td>$cookieName</td><td>$cookieValue</td></tr>";
+                }
                 ?>
             </tbody>
         </table>
     </div>
+
+
     <div id="borrarCookies" class="container mb-3">
+        <button type="submit" class="btn btn-primary">Borrar cookies</button>
     </div>
-
-
 </body>
 
 </html>
