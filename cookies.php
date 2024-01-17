@@ -43,9 +43,16 @@
 
     //verificamos si se le  ha dado un valor  al campo expiracion o aplicamos su valor por defecto
     $cookieExpirationSeconds = isset($_POST["cookieExpirationSeconds"]) ? (int) $_POST["cookieExpirationSeconds"] : 0;
-    // he tenido que añadir algunos parametros  para las pruebas porque en mi navegador daba error. Lo dejo en comentarios por si es necesario;
-    setcookie($cookieName, $cookieValue, time() + $cookieExpirationSeconds);
-    }
+        
+   //Si el valor de $cookieExpirationSeconds no es 0 setcookie utiliza la funcion time(). 
+    //Si el valor no es introducido y por lo tanto el valor se igual a 0, no podemos usar la funcion time() en setcookie 
+        
+        if ($_POST["cookieExpirationSeconds"] != 0) {
+            // he tenido que añadir algunos parametros  para las pruebas porque en mi navegador daba error. Lo dejo en comentarios por si es necesario;
+            setcookie($cookieName, $cookieValue, time() + $cookieExpirationSeconds);
+        } else {
+            setcookie($cookieName, $cookieValue);
+        }
     
     ?>
 
