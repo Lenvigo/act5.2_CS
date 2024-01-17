@@ -46,6 +46,7 @@
     // he tenido que añadir algunos parametros  para las pruebas porque en mi navegador daba error. Lo dejo en comentarios por si es necesario;
     setcookie($cookieName, $cookieValue, time() + $cookieExpirationSeconds);
     }
+    
     ?>
 
 
