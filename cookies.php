@@ -33,10 +33,26 @@
             <button type="submit" class="btn btn-primary">Añadir cookie</button>
         </form>
     </div>
+    
+    <?php
+
+    if (isset($_POST["cookieName"], $_POST["cookieValue"])) {
+
+    $cookieName = $_POST["cookieName"];
+    $cookieValue = $_POST["cookieValue"];
+
+    //verificamos si se le  ha dado un valor  al campo expiracion o aplicamos su valor por defecto
+    $cookieExpirationSeconds = isset($_POST["cookieExpirationSeconds"]) ? (int) $_POST["cookieExpirationSeconds"] : 0;
+    // he tenido que añadir algunos parametros  para las pruebas porque en mi navegador daba error. Lo dejo en comentarios por si es necesario;
+    setcookie($cookieName, $cookieValue, time() + $cookieExpirationSeconds);
+    }
+    ?>
+
 
     <div id="cookiesCreadas" class="container mb-3">
         <h2>Cookies creadas</h2>
 
+        <!-- del rol B
         <table class="table">
             <thead>
                 <tr>
@@ -45,33 +61,24 @@
                 </tr>
             </thead>
             <tbody>
+                
                 <?php
-
-                if (isset($_POST["cookieName"], $_POST["cookieValue"])) {
-
-                    $cookieName = $_POST["cookieName"];
-                    $cookieValue = $_POST["cookieValue"];
-
-                    //verificamos si se le  ha dado un valor  al campo expiracion o aplicamos su valor por defecto
-                    $cookieExpirationSeconds = isset($_POST["cookieExpirationSeconds"]) ? (int) $_POST["cookieExpirationSeconds"] : 0;
-                    // he tenido que añadir algunos parametros  para las pruebas porque en mi navegador daba error. Lo dejo en comentarios por si es necesario;
-                    setcookie($cookieName, $cookieValue, time() + $cookieExpirationSeconds);
-                }
-
                 // declaramos e inicializamos un array vacio para  almacenar nombre y valor de las cookies
-                $cookiesArray = array();
-                //recorremos nombre y valor de todas las cookies presentes en $_COOKIE recopilandolas en la array
-                foreach ($_COOKIE as $name => $value) {
-                    $cookiesArray[$name] = $value;
-                }
-                //recorremos nuestra array para mostrarla por pantalla
-                foreach ($cookiesArray as $cookieName => $cookieValue) {
-                    echo "<tr><td>$cookieName</td><td>$cookieValue</td></tr>";
-                }
+                // $cookiesArray = array();
+                // recorremos nombre y valor de todas las cookies presentes en $_COOKIE recopilandolas en la array
+                // foreach ($_COOKIE as $name => $value) {
+                //   $cookiesArray[$name] = $value;
+                // }
+                // recorremos nuestra array para mostrarla por pantalla
+                // foreach ($cookiesArray as $cookieName => $cookieValue) {
+                //   echo "<tr><td>$cookieName</td><td>$cookieValue</td></tr>";
+                // }
                 ?>
+
             </tbody>
         </table>
-    </div>
+
+    </div> -->
 
 
     <div id="borrarCookies" class="container mb-3">
