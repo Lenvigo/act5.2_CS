@@ -40,7 +40,10 @@
 
         <table class="table">
             <thead>
-                <tr>
+        <tr>
+            <th scope="col">Cookie name</th>
+            <th scope="col">Cookie value</th>                
+        </tr>
 
             </thead>
             <tbody>
@@ -55,12 +58,12 @@
                     //verificamos si se le  ha dado un valor  al campo expiracion o aplicamos su valor por defecto
                     $cookieExpirationSeconds = isset($_POST["cookieExpirationSeconds"]) ? (int)$_POST["cookieExpirationSeconds"] : 0;
 
-                    if ($_POST["cookieExpirationSeconds"] != 0) {
+                    if ($_POST["cookieExpirationSeconds"] > 0) {
                         // he tenido que añadir algunos parametros  para las pruebas porque en mi navegador daba error. Lo dejo en comentarios por si es necesario;
                         setcookie($cookieName, $cookieValue, time() + $cookieExpirationSeconds);
                         //con esto refrescamos la pagina para que nos muestre la cookie creada.
                         header("Location:cookies.php");
-                        exit; // seutiliza para forzar que el script se ejecute
+                        exit; // se utiliza para forzar que el script se ejecute
                     } else {
                         setcookie($cookieName, $cookieValue, 0);
                         //con esto refrescamos la pagina para que nos muestre la cookie creada.
@@ -92,10 +95,21 @@
 
 
     <div id="borrarCookies" class="container mb-3">
-        <button type="submit" class="btn btn-primary">Borrar cookies</button>
+    <form method="post">
+            <button type="submit" class="btn btn-danger" name="borrarCookies">Borrar todas las cookies</button>
+        </form>
 
- <!--        HACER -->
- 
+
+
+        <?php
+        if (isset($_POST["borrarCookies"])) {
+            foreach ($_COOKIE as $cookieName => $cookieValue) {
+                setcookie($cookieName, $cookieValue, time() - 3600);
+            }
+            header("Location: cookies.php");
+            exit;
+        }
+        ?>
     </div>
 </body>
 
